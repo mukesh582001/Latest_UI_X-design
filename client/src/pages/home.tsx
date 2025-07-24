@@ -371,159 +371,246 @@ export default function Home() {
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: 400, opacity: 0 }}
                   transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                  className="fixed right-0 top-16 bottom-0 w-96 sidebar-panel z-20 overflow-hidden flex flex-col"
+                  className="fixed right-0 top-16 bottom-0 w-[420px] z-20 overflow-hidden flex flex-col bg-gradient-to-b from-white via-gray-50/50 to-white backdrop-blur-xl border-l border-gray-200/30 shadow-2xl"
                 >
-                  {/* Sidebar Header */}
-                  <div className="p-6 border-b border-gray-200/50">
-                    <div className="flex items-center justify-between mb-2">
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        {currentCategory ? (
-                          <div className="flex items-center">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={handleBackToCategories}
-                              className="mr-2 p-1 hover:bg-gray-100"
-                            >
-                              <ArrowLeft className="h-4 w-4" />
-                            </Button>
-                            {categories.find(c => c.id === currentCategory)?.name}
-                          </div>
-                        ) : (
-                          'Customize Kitchen'
-                        )}
-                      </h2>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowSidebar(false)}
-                        className="text-gray-400 hover:text-gray-600 h-8 w-8 p-0"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+                  {/* Premium Header with Gradient */}
+                  <div className="relative p-8 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/90 to-indigo-800/90 backdrop-blur-sm"></div>
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-2xl font-bold tracking-tight">
+                          {currentCategory ? (
+                            <div className="flex items-center">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleBackToCategories}
+                                className="mr-3 p-2 hover:bg-white/20 text-white border border-white/20 rounded-lg transition-all duration-200"
+                              >
+                                <ArrowLeft className="h-4 w-4" />
+                              </Button>
+                              {categories.find(c => c.id === currentCategory)?.name}
+                            </div>
+                          ) : (
+                            'Design Studio'
+                          )}
+                        </h2>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowSidebar(false)}
+                          className="text-white/80 hover:text-white hover:bg-white/20 h-10 w-10 p-0 rounded-lg border border-white/20 transition-all duration-200"
+                        >
+                          <X className="h-5 w-5" />
+                        </Button>
+                      </div>
+                      {currentCategory ? (
+                        <p className="text-blue-100 text-sm font-medium">
+                          {categories.find(c => c.id === currentCategory)?.description}
+                        </p>
+                      ) : (
+                        <p className="text-blue-100 text-sm font-medium">
+                          Craft your perfect kitchen design
+                        </p>
+                      )}
                     </div>
-                    {currentCategory && (
-                      <p className="text-sm text-gray-500">
-                        {categories.find(c => c.id === currentCategory)?.description}
-                      </p>
-                    )}
+                    {/* Decorative Elements */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/10 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
                   </div>
-                  {/* Search Bar */}
+
+                  {/* Enhanced Search Bar */}
                   {currentCategory && (
-                    <div className="p-6 border-b border-gray-200/50">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <div className="p-6 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+                      <div className="relative group">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-blue-600 transition-colors duration-200" />
                         <Input
                           placeholder="Search options..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="search-input pl-10"
+                          className="pl-12 h-12 bg-white/90 border-gray-200/60 rounded-xl text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm"
                         />
                       </div>
                     </div>
                   )}
-                  {/* Content Area */}
-                  <div className="flex-1 overflow-y-auto p-6">
+
+                  {/* Premium Content Area */}
+                  <div className="flex-1 overflow-y-auto bg-gradient-to-b from-white to-gray-50/30">
                     {!currentCategory ? (
-                      <div className="space-y-4">
-                        {categories.map((category) => {
-                          const IconComponent = category.icon;
-                          return (
-                            <motion.div
-                              key={category.id}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                            >
-                              <div
-                                onClick={() => handleCategorySelect(category.id)}
-                                className="category-button group"
+                      <div className="p-6 space-y-4">
+                        {currentCategory ? (
+                          categories.map((category, index) => {
+                            const IconComponent = category.icon;
+                            return (
+                              <motion.div
+                                key={category.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1, duration: 0.4 }}
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
                               >
-                                <div className="flex items-center space-x-4">
-                                  <div className="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors duration-200">
-                                    <IconComponent className="h-6 w-6 text-blue-600" />
+                                <div
+                                  onClick={() => handleCategorySelect(category.id)}
+                                  className="group relative overflow-hidden bg-gradient-to-br from-white to-gray-50/50 hover:from-blue-50 hover:to-indigo-50/50 border border-gray-200/60 hover:border-blue-300/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-lg"
+                                >
+                                  {/* Background Pattern */}
+                                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                  
+                                  <div className="relative z-10 flex items-center space-x-5">
+                                    <div className="relative">
+                                      <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                                        <IconComponent className="h-7 w-7 text-white" />
+                                      </div>
+                                      {/* Glow Effect */}
+                                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                                    </div>
+                                    <div className="flex-1">
+                                      <h3 className="font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300 text-lg">
+                                        {category.name}
+                                      </h3>
+                                      <p className="text-gray-600 group-hover:text-blue-600 transition-colors duration-300 text-sm mt-1 font-medium">
+                                        {category.description}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center">
+                                      <div className="p-2 bg-gray-100 group-hover:bg-blue-100 rounded-lg transition-all duration-300">
+                                        <ArrowLeft className="h-4 w-4 text-gray-400 group-hover:text-blue-600 rotate-180 transition-all duration-300 group-hover:translate-x-1" />
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="flex-1">
-                                    <h3 className="font-medium text-gray-900 group-hover:text-blue-700 transition-colors duration-200">
-                                      {category.name}
-                                    </h3>
-                                    <p className="text-sm text-gray-500 mt-1">
-                                      {category.description}
-                                    </p>
-                                  </div>
-                                  <ArrowLeft className="h-4 w-4 text-gray-400 rotate-180 group-hover:text-blue-600 transition-colors duration-200" />
                                 </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
+                              </motion.div>
+                            );
+                          })
+                        ) : (
+                          categories.map((category, index) => {
+                            const IconComponent = category.icon;
+                            return (
+                              <motion.div
+                                key={category.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1, duration: 0.4 }}
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                <div
+                                  onClick={() => handleCategorySelect(category.id)}
+                                  className="group relative overflow-hidden bg-gradient-to-br from-white to-gray-50/50 hover:from-blue-50 hover:to-indigo-50/50 border border-gray-200/60 hover:border-blue-300/60 rounded-2xl p-6 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-lg"
+                                >
+                                  {/* Background Pattern */}
+                                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                  
+                                  <div className="relative z-10 flex items-center space-x-5">
+                                    <div className="relative">
+                                      <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-110">
+                                        <IconComponent className="h-7 w-7 text-white" />
+                                      </div>
+                                      {/* Glow Effect */}
+                                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"></div>
+                                    </div>
+                                    <div className="flex-1">
+                                      <h3 className="font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300 text-lg">
+                                        {category.name}
+                                      </h3>
+                                      <p className="text-gray-600 group-hover:text-blue-600 transition-colors duration-300 text-sm mt-1 font-medium">
+                                        {category.description}
+                                      </p>
+                                    </div>
+                                    <div className="flex items-center">
+                                      <div className="p-2 bg-gray-100 group-hover:bg-blue-100 rounded-lg transition-all duration-300">
+                                        <ArrowLeft className="h-4 w-4 text-gray-400 group-hover:text-blue-600 rotate-180 transition-all duration-300 group-hover:translate-x-1" />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            );
+                          })
+                        )}
                       </div>
                     ) : (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="space-y-6"
-                      >
-                        {currentCategory === 'wall-colors' && (
-                          <ColorPicker
-                            color={customization.wallColor}
-                            onColorChange={updateWallColor}
-                            className="shadow-none bg-transparent p-0"
-                            searchTerm={searchTerm}
-                          />
-                        )}
-                        {currentCategory === 'cabinets' && (
-                          <CabinetSelector
-                            selectedCabinet={customization.cabinet}
-                            onCabinetSelect={updateCabinet}
-                            className="shadow-none bg-transparent p-0"
-                            searchTerm={searchTerm}
-                          />
-                        )}
-                        {currentCategory === 'backsplash' && (
-                          <BacksplashSelector
-                            selectedBacksplash={customization.backsplash}
-                            onBacksplashSelect={updateBacksplash}
-                            className="shadow-none bg-transparent p-0"
-                            searchTerm={searchTerm}
-                          />
-                        )}
-                        {currentCategory === 'flooring' && (
-                          <FlooringSelector
-                            selectedFlooring={customization.flooring}
-                            onFlooringSelect={updateFlooring}
-                            className="shadow-none bg-transparent p-0"
-                            searchTerm={searchTerm}
-                          />
-                        )}
-                      </motion.div>
+                      <div className="p-6">
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="space-y-8"
+                        >
+                          {currentCategory === 'wall-colors' && (
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 shadow-lg">
+                              <ColorPicker
+                                color={customization.wallColor}
+                                onColorChange={updateWallColor}
+                                className="shadow-none bg-transparent p-0"
+                                searchTerm={searchTerm}
+                              />
+                            </div>
+                          )}
+                          {currentCategory === 'cabinets' && (
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 shadow-lg">
+                              <CabinetSelector
+                                selectedCabinet={customization.cabinet}
+                                onCabinetSelect={updateCabinet}
+                                className="shadow-none bg-transparent p-0"
+                                searchTerm={searchTerm}
+                              />
+                            </div>
+                          )}
+                          {currentCategory === 'backsplash' && (
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 shadow-lg">
+                              <BacksplashSelector
+                                selectedBacksplash={customization.backsplash}
+                                onBacksplashSelect={updateBacksplash}
+                                className="shadow-none bg-transparent p-0"
+                                searchTerm={searchTerm}
+                              />
+                            </div>
+                          )}
+                          {currentCategory === 'flooring' && (
+                            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200/50 shadow-lg">
+                              <FlooringSelector
+                                selectedFlooring={customization.flooring}
+                                onFlooringSelect={updateFlooring}
+                                className="shadow-none bg-transparent p-0"
+                                searchTerm={searchTerm}
+                              />
+                            </div>
+                          )}
+                        </motion.div>
+                      </div>
                     )}
                   </div>
-                  {/* Sidebar Footer - Actions */}
-                  <div className="p-6 border-t border-gray-200/50 bg-gray-50/50">
-                    <div className="space-y-3">
+
+                  {/* Premium Footer */}
+                  <div className="relative p-6 bg-gradient-to-r from-gray-50 to-white border-t border-gray-200/30">
+                    <div className="space-y-4">
                       <Button
                         onClick={handleExportDesign}
                         disabled={isLoading}
-                        className="w-full timber-gradient-subtle text-white hover:opacity-90 transition-all duration-200 shadow-sm hover:shadow-md"
+                        className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
                       >
                         {isLoading ? (
-                          <div className="flex items-center">
+                          <div className="flex items-center justify-center">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Processing...
+                            <span>Processing...</span>
                           </div>
                         ) : (
-                          <>
+                          <div className="flex items-center justify-center">
                             <Download className="mr-2 h-4 w-4" />
-                            Download Design
-                          </>
+                            <span>Download Design</span>
+                          </div>
                         )}
                       </Button>
+                      
                       <Dialog open={showInquiryDialog} onOpenChange={setShowInquiryDialog}>
                         <DialogTrigger asChild>
-                          <Button className="w-full bg-green-600 text-white hover:bg-green-700 transition-all duration-200 shadow-sm hover:shadow-md">
-                            <Send className="mr-2 h-4 w-4" />
-                            Send Inquiry
+                          <Button className="w-full h-12 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+                            <div className="flex items-center justify-center">
+                              <Send className="mr-2 h-4 w-4" />
+                              <span>Send Inquiry</span>
+                            </div>
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="modal-content sm:max-w-md">
@@ -568,14 +655,14 @@ export default function Home() {
                             <Button 
                               variant="outline" 
                               onClick={() => setShowInquiryDialog(false)} 
-                              className="flex-1 hover:bg-gray-50 transition-colors duration-200"
+                              className="flex-1 h-11 hover:bg-gray-50 transition-colors duration-200 rounded-lg"
                             >
                               Cancel
                             </Button>
                             <Button 
                               onClick={handleInquirySubmit} 
                               disabled={isLoading}
-                              className="flex-1 bg-green-600 hover:bg-green-700 transition-colors duration-200"
+                              className="flex-1 h-11 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 transition-all duration-200 rounded-lg"
                             >
                               {isLoading ? (
                                 <div className="flex items-center">
